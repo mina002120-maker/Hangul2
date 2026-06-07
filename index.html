@@ -40,12 +40,11 @@
   .wrap{
     display:flex; flex-direction:column;
     width:100%; height:100%;
-    max-width:900px; margin:0 auto;
     padding:0; overflow:hidden;
   }
   header{
     flex-shrink:0;
-    text-align:center; padding:clamp(4px,1vh,10px) 0 clamp(2px,.5vh,6px);
+    text-align:center; padding:clamp(2px,.5vh,6px) 0 clamp(1px,.3vh,4px);
   }
   header h1{
     margin:0; font-size:clamp(1.4rem,3.5vw,2.4rem);
@@ -61,7 +60,7 @@
   /* ── 뷰 영역: 남은 공간을 전부 차지, 내부 스크롤 없음 ── */
   #view{
     flex:1; overflow:hidden; min-height:0;
-    padding:clamp(6px,1.2vw,14px) clamp(8px,2vw,20px) clamp(4px,1vh,10px);
+    padding:clamp(4px,.8vh,10px) clamp(6px,1.2vw,14px) clamp(4px,.8vh,8px);
     display:flex; flex-direction:column;
   }
 
@@ -78,10 +77,10 @@
     cursor:pointer;box-shadow:0 3px 0 rgba(245,147,0,.3);transition:.12s;z-index:10;}
   .sound-toggle:active{transform:translateY(-50%) scale(.92);}
   .sound-toggle.off{border-color:#cbc3b8;box-shadow:0 3px 0 rgba(0,0,0,.1);opacity:.6;}
-  header h1{margin:0;font-size:clamp(1.4rem,4vh,2.4rem);letter-spacing:2px;color:var(--berry-d);
+  header h1{margin:0;font-size:clamp(2rem,5vh,3.2rem);letter-spacing:2px;color:var(--berry-d);
     text-shadow:3px 3px 0 #fff, 5px 5px 0 rgba(0,0,0,.08);}
   header h1 .b{color:var(--sky-d);}
-  header p{font-family:'Nanum Gothic';font-weight:700;color:#8a7b73;margin:clamp(2px,.5vh,6px) 0 0;font-size:clamp(.8rem,1.6vh,1.05rem);}
+  header p{font-family:'Nanum Gothic';font-weight:700;color:#8a7b73;margin:clamp(2px,.5vh,6px) 0 0;font-size:clamp(1rem,2vh,1.35rem);}
 
   /* 받침 카드 그리드 (대표 받침 7개) */
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1.5vw,14px);
@@ -103,7 +102,7 @@
   .all-done .em{font-size:3rem;}
 
   /* 상세 화면 */
-  .detail{background:var(--card);border-radius:clamp(16px,2vw,28px);
+  .detail{background:var(--card);border-radius:clamp(10px,1.5vw,20px);
     padding:clamp(10px,1.5vw,20px) clamp(10px,2vw,20px) clamp(10px,1.5vh,18px);
     box-shadow:var(--shadow);animation:pop .3s ease;
     display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
@@ -143,7 +142,7 @@
   .fairy-bar .bubble{position:relative;background:#fff;border:3px solid var(--sun);
     border-radius:18px;padding:clamp(9px,1.6vh,15px) clamp(14px,2.4vw,22px);
     font-family:'Jua';color:var(--ink);font-size:clamp(1.2rem,2.8vh,1.7rem);
-    box-shadow:0 4px 0 rgba(245,147,0,.25);max-width:620px;line-height:1.35;text-align:left;word-break:keep-all;}
+    box-shadow:0 4px 0 rgba(245,147,0,.25);line-height:1.35;text-align:left;word-break:keep-all;}
   .fairy-bar .bubble b{color:var(--berry-d);}
   /* 말풍선 꼬리 — 왼쪽(요정 방향) */
   .fairy-bar .bubble::before{content:'';position:absolute;left:-15px;top:50%;transform:translateY(-50%);
@@ -160,7 +159,7 @@
   .ex-grid{display:grid;grid-template-columns:repeat(3,1fr);
     gap:clamp(6px,1vw,12px);justify-items:stretch;
     margin-top:clamp(2px,.4vh,6px);flex:1;align-content:start;overflow:hidden;
-    max-width:720px;margin-left:auto;margin-right:auto;width:100%;}
+    width:100%;}
   .ex-card{position:relative;background:var(--bg1);border-radius:16px;width:100%;
     padding:clamp(6px,1vh,10px) clamp(4px,.8vw,8px);text-align:center;cursor:pointer;
     border:3px solid transparent;transition:.12s;}
@@ -192,22 +191,22 @@
   .mblock{display:inline-flex;flex-direction:column;align-items:center;gap:2px;vertical-align:top;margin:0 2px;}
   .mtop{display:flex;gap:2px;align-items:center;justify-content:center;}
   .mtop.vert{flex-direction:column;}
-  .mbox{font-family:'Nanum Gothic',sans-serif;font-weight:800;font-size:clamp(.85rem,1.8vh,1.1rem);line-height:1;
+  .mbox{font-family:'Nanum Gothic',sans-serif;font-weight:800;font-size:clamp(1.6rem,4vh,2.8rem);line-height:1;
     width:1.4em;height:1.4em;display:flex;align-items:center;justify-content:center;
     background:#fff;border:2px solid #e5e0d6;border-radius:6px;color:var(--ink);}
   .mbox.mj{border-width:2px;}
 
   /* STEP2 따라 말하기 + 녹음 */
   .say-word{text-align:center;}
-  .say-word .se{font-size:4.4rem;line-height:1;}
-  .say-word .sw{font-family:'Nanum Gothic',sans-serif;font-weight:800;font-size:3.4rem;}
+  .say-word .se{font-size:clamp(5rem,14vh,9rem);line-height:1;}
+  .say-word .sw{font-family:'Nanum Gothic',sans-serif;font-weight:800;font-size:clamp(3rem,8vh,5.5rem);}
   .say-word .sw .hl{color:var(--berry-d);}
   .rec-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
   .rec-msg{font-family:'Nanum Gothic';font-weight:700;text-align:center;font-size:clamp(.8rem,1.6vw,1.05rem);color:#7c6d65;min-height:0;margin-top:clamp(4px,.8vh,8px);flex-shrink:0;word-break:keep-all;white-space:normal;}
   /* 음성 인식 결과 표시 */
   .heard-box{font-family:'Nanum Gothic';font-weight:800;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
     font-size:clamp(1rem,2.2vh,1.4rem);border-radius:16px;padding:clamp(8px,1.5vh,14px);
-    margin:clamp(6px,1vh,10px) auto 0;max-width:420px;flex-shrink:0;}
+    margin:clamp(6px,1vh,10px) auto 0;flex-shrink:0;}
   .heard-box.ok{background:#eafaf0;color:var(--grass-d);border:3px solid var(--grass);}
   .heard-box.no{background:#fff0f0;color:var(--berry-d);border:3px solid var(--berry);}
   .heard-box b{font-size:1.15em;}
@@ -216,11 +215,11 @@
   @keyframes blink{50%{opacity:.2}}
   /* 발음 안내 */
   .pron-hint{font-family:'Nanum Gothic';font-weight:800;text-align:center;
-    font-size:clamp(.95rem,2vh,1.25rem);color:#7c6d65;margin:clamp(4px,1vh,10px) 0;flex-shrink:0;}
+    font-size:clamp(1.2rem,3vh,1.8rem);color:#7c6d65;margin:clamp(4px,1vh,10px) 0;flex-shrink:0;}
   .pron-hint b{color:var(--sky-d);}
   /* 자기 평가 별표 */
   .selfrate{background:linear-gradient(120deg,#fff6e0,#ffe9ef);border-radius:22px;
-    padding:clamp(12px,2vh,20px);margin:clamp(8px,1.5vh,14px) auto 0;max-width:520px;
+    padding:clamp(12px,2vh,20px);margin:clamp(8px,1.5vh,14px) auto 0;
     text-align:center;flex-shrink:0;animation:pop .25s ease;}
   .selfrate .sr-title{font-family:'Jua';color:var(--berry-d);font-size:clamp(1rem,2.2vh,1.35rem);margin:0 0 clamp(6px,1.2vh,12px);word-break:keep-all;}
   .stars{display:flex;justify-content:center;gap:clamp(4px,1vw,12px);}
@@ -305,8 +304,8 @@
   .trace-modal .tm-btns{display:flex;gap:10px;margin-top:14px;}
   /* 소리 같을까/다를까 질문 버튼 */
   .listen-row{display:flex;flex-wrap:wrap;gap:clamp(8px,1.2vw,14px);justify-content:center;margin:clamp(10px,1.8vh,16px) 0;}
-  .word-listen{font-family:'Jua';font-size:clamp(1.4rem,3.2vh,2rem);border:2.5px solid var(--sky);cursor:pointer;
-    background:#fff;color:var(--ink);border-radius:16px;padding:clamp(12px,2vh,18px) clamp(18px,3vw,26px);transition:.12s;}
+  .word-listen{font-family:'Jua';font-size:clamp(1.6rem,3.8vh,2.4rem);border:2.5px solid var(--sky);cursor:pointer;
+    background:#fff;color:var(--ink);border-radius:16px;padding:clamp(14px,2.5vh,20px) clamp(20px,3.5vw,30px);transition:.12s;}
   .word-listen:active{transform:scale(.94);background:#eaf5fd;}
   .q-btns{display:flex;gap:clamp(12px,2vw,20px);justify-content:center;flex-wrap:wrap;margin:clamp(18px,3vh,28px) 0 8px;}
   .q-opt{font-family:'Jua';font-size:clamp(1.2rem,2.8vh,1.8rem);border:none;cursor:pointer;color:#fff;white-space:nowrap;
@@ -392,7 +391,7 @@
   @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:.2}}
 
   /* 공책 쓰기 화면 */
-  .notebook-wrap{background:var(--card);border-radius:24px;padding:18px 16px 22px;box-shadow:var(--shadow);}
+  .notebook-wrap{background:var(--card);border-radius:clamp(10px,1.5vw,20px);padding:clamp(12px,2vh,20px) clamp(12px,2vw,20px);box-shadow:var(--shadow);flex:1;display:flex;flex-direction:column;}
   .notebook-wrap .nb-title{font-family:'Jua';font-size:1.2rem;color:var(--sky-d);text-align:center;margin:0 0 14px;}
   .nb-word-row{display:flex;align-items:center;gap:0;margin-bottom:clamp(10px,2vh,18px);}
   .nb-word-label{display:none;}
@@ -416,13 +415,14 @@
   }
 
   /* 시작 화면들 (인트로 / 이름 / 마이크) */
-  .start-card{background:var(--card);border-radius:28px;padding:28px 22px;box-shadow:var(--shadow);
+  .start-card{background:var(--card);border-radius:clamp(10px,1.5vw,20px);padding:clamp(20px,3.5vh,36px) clamp(16px,3vw,28px);box-shadow:var(--shadow);
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;margin-top:16px;animation:pop .3s ease;}
-  .start-card .big-emoji{font-size:4.5rem;line-height:1;margin-bottom:6px;}
-  .start-card h2{font-family:'Jua';color:var(--berry-d);font-size:1.7rem;margin:6px 0 4px;}
-  .start-card p.s-sub{font-family:'Nanum Gothic';font-weight:700;color:#7c6d65;font-size:1.1rem;margin:0 0 18px;}
-  .start-card .big-btn{font-family:'Jua';font-size:clamp(1.3rem,3vh,1.8rem);border:none;cursor:pointer;color:#fff;
-    background:var(--grass);border-radius:20px;padding:16px 32px;box-shadow:0 6px 0 var(--grass-d);transition:.12s;}
+  .start-card .big-emoji{font-size:clamp(5rem,12vh,8rem);line-height:1;margin-bottom:10px;}
+  .start-card h2{font-family:'Jua';color:var(--berry-d);font-size:clamp(2.4rem,5.5vh,3.6rem);margin:8px 0 8px;}
+  .start-card p.s-sub{font-family:'Nanum Gothic';font-weight:700;color:#7c6d65;font-size:clamp(1.4rem,3vh,2rem);margin:0 0 24px;}
+  .start-card .big-btn{font-family:'Jua';font-size:clamp(1.6rem,3.8vh,2.4rem);border:none;cursor:pointer;color:#fff;
+    background:var(--grass);border-radius:20px;padding:clamp(16px,2.5vh,24px) clamp(32px,5vw,48px);box-shadow:0 6px 0 var(--grass-d);transition:.12s;}
   .start-card .big-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--grass-d);}
   .name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin:8px 0 18px;}
   .name-btn{font-family:'Jua';font-size:1.25rem;border:none;cursor:pointer;background:#fff;color:var(--ink);
@@ -799,7 +799,7 @@ function goNameSelect(){
     <div class="start-card">
       <div class="big-emoji">🙋</div>
       <h2>이름을 골라요</h2>
-      <p class="s-sub">드롭다운에서 이름을 선택하세요</p>
+      <p class="s-sub">아래에서 이름을 선택하세요</p>
       <div class="name-select-wrap">
         <select class="name-select" id="nameSelect">${options}</select>
         <span class="name-select-arrow">▼</span>
@@ -808,7 +808,7 @@ function goNameSelect(){
     </div>`;
   const sel=document.getElementById('nameSelect');
   const btn=document.getElementById('nameConfirm');
-  speakGuide('이름을 골라요. 드롭다운에서 이름을 선택하세요');
+  speakGuide('이름을 골라요. 아래에서 이름을 선택하세요');
   sel.addEventListener('change',()=>{
     btn.disabled=false;
     speakGuide(sel.value ? sel.value+'!' : '이름을 골라요');

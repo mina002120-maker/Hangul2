@@ -28,7 +28,12 @@
   html,body{
     margin:0; padding:0;
     width:100%; height:100%;
-    overflow:hidden;       /* 스크롤 절대 금지 */
+    height:100dvh;          /* 동적 뷰포트 높이: 태블릿 주소창 변화에도 스크롤 없음 */
+    overflow:hidden;        /* 스크롤 절대 금지 */
+    position:fixed;         /* 뷰포트 완전 고정 (iOS 사파리 바운스 방지) */
+    inset:0;
+    overscroll-behavior:none;
+    touch-action:manipulation;
   }
   body{
     font-family:'Jua',sans-serif; color:var(--ink);
@@ -83,19 +88,20 @@
   header p{font-family:'Nanum Gothic';font-weight:700;color:#8a7b73;margin:clamp(2px,.5vh,6px) 0 0;font-size:clamp(1rem,2vh,1.35rem);}
 
   /* 받침 카드 그리드 (대표 받침 7개) */
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1.5vw,14px);
-    margin-top:clamp(8px,1.5vh,16px); flex:1; align-content:start;}
-  @media(max-width:500px){.grid{grid-template-columns:repeat(2,1fr);}}
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,360px));gap:clamp(10px,2vw,20px);
+    margin-top:clamp(8px,1.5vh,16px); flex:1; align-content:start; justify-content:center;}
+  @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,360px));}}
+  @media(max-width:500px){.grid{grid-template-columns:minmax(0,1fr);}}
   .jcard{border:none;cursor:pointer;text-align:left;background:var(--card);
-    border-radius:clamp(14px,2vw,24px);padding:clamp(10px,1.5vw,16px);box-shadow:var(--shadow);
+    border-radius:clamp(14px,2vw,24px);padding:clamp(12px,1.8vw,20px);box-shadow:var(--shadow);
     border:4px solid var(--c,#eee);transition:transform .12s, box-shadow .12s;
-    display:flex;align-items:center;gap:clamp(6px,1vw,12px);}
+    display:flex;align-items:center;gap:clamp(8px,1.2vw,14px);}
   .jcard:active{transform:translateY(4px);box-shadow:0 4px 0 rgba(0,0,0,.1);}
-  .jcard .jbig{font-size:2.6rem;width:64px;height:64px;flex:none;display:grid;place-items:center;
+  .jcard .jbig{font-size:clamp(2.4rem,4vw,3rem);width:clamp(60px,8vw,76px);height:clamp(60px,8vw,76px);flex:none;display:grid;place-items:center;
     border-radius:18px;background:var(--cb,#fff3e0);color:var(--c);font-family:'Jua';}
-  .jcard .jt{font-size:1.25rem;}
-  .jcard .jt small{display:block;font-family:'Nanum Gothic';font-weight:700;font-size:1rem;color:#8a7b73;margin-top:2px;}
-  .jcard .done-badge{margin-left:auto;font-size:1.4rem;}
+  .jcard .jt{font-size:clamp(1.3rem,2.2vw,1.7rem);font-family:'Jua';}
+  .jcard .jt small{display:block;font-family:'Nanum Gothic';font-weight:700;font-size:clamp(1rem,1.6vw,1.25rem);color:#8a7b73;margin-top:2px;}
+  .jcard .done-badge{margin-left:auto;font-size:1.6rem;}
 
   .all-done{grid-column:1/-1;text-align:center;background:var(--card);border-radius:24px;
     padding:18px;box-shadow:var(--shadow);border:4px solid var(--sun);animation:pop .3s;}
@@ -156,27 +162,28 @@
   @keyframes fairyFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
   /* 예시 낱말 */
-  .ex-grid{display:grid;grid-template-columns:repeat(3,1fr);
-    gap:clamp(6px,1vw,12px);justify-items:stretch;
+  .ex-grid{display:grid;grid-template-columns:repeat(3,minmax(0,300px));
+    gap:clamp(10px,1.5vw,18px);justify-items:stretch;justify-content:center;
     margin-top:clamp(2px,.4vh,6px);flex:1;align-content:start;overflow:hidden;
     width:100%;}
-  .ex-card{position:relative;background:var(--bg1);border-radius:16px;width:100%;
-    padding:clamp(6px,1vh,10px) clamp(4px,.8vw,8px);text-align:center;cursor:pointer;
+  @media(max-width:700px){.ex-grid{grid-template-columns:repeat(2,minmax(0,300px));}}
+  .ex-card{position:relative;background:var(--bg1);border-radius:18px;width:100%;
+    padding:clamp(10px,1.6vh,16px) clamp(8px,1.2vw,14px);text-align:center;cursor:pointer;
     border:3px solid transparent;transition:.12s;}
   .ex-card:active{transform:scale(.95);}
   .ex-card.lit{border-color:var(--sun);background:#fff8e8;}
   /* 소리를 들은 카드: 초록 배경 + 체크 배지로 누적 표시 */
   .ex-card.heard{border-color:var(--grass);background:#eafaf0;}
   .ex-card.heard::after{content:'✓';position:absolute;top:4px;right:6px;
-    width:20px;height:20px;border-radius:50%;background:var(--grass);color:#fff;
-    font-size:.8rem;font-weight:800;display:flex;align-items:center;justify-content:center;
+    width:24px;height:24px;border-radius:50%;background:var(--grass);color:#fff;
+    font-size:.9rem;font-weight:800;display:flex;align-items:center;justify-content:center;
     box-shadow:0 2px 0 rgba(0,0,0,.12);}
   .ex-card.lit.heard{border-color:var(--sun);}
-  .ex-card .ee{font-size:clamp(2rem,4.5vh,3rem);}
-  .ex-card .ew{font-family:'Nanum Gothic',sans-serif;font-weight:800;font-size:clamp(1.1rem,2.6vh,1.8rem);display:flex;align-items:flex-start;justify-content:center;gap:3px;flex-wrap:nowrap;}
+  .ex-card .ee{font-size:clamp(2.6rem,6vh,4rem);}
+  .ex-card .ew{font-family:'Nanum Gothic',sans-serif;font-weight:800;font-size:clamp(1.5rem,3.5vh,2.4rem);display:flex;align-items:flex-start;justify-content:center;gap:4px;flex-wrap:nowrap;margin-top:4px;}
   .ex-card .ew .hl{color:var(--berry-d);}
   /* 단어 카드 안의 자모 박스 */
-  .ex-card .ew .mbox{font-size:clamp(1rem,2.3vh,1.5rem);width:1.35em;height:1.35em;border-width:2px;}
+  .ex-card .ew .mbox{font-size:clamp(1.4rem,3.2vh,2.1rem);width:1.35em;height:1.35em;border-width:2.5px;}
   /* 페이지 넘김 */
   .pager{display:flex;align-items:center;justify-content:center;gap:clamp(8px,1.5vw,14px);
     margin:clamp(4px,.6vh,8px) 0 0;flex-shrink:0;}
@@ -418,21 +425,21 @@
   .start-card{background:var(--card);border-radius:clamp(10px,1.5vw,20px);padding:clamp(20px,3.5vh,36px) clamp(16px,3vw,28px);box-shadow:var(--shadow);
     flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;margin-top:16px;animation:pop .3s ease;}
-  .start-card .big-emoji{font-size:clamp(5rem,12vh,8rem);line-height:1;margin-bottom:10px;}
-  .start-card h2{font-family:'Jua';color:var(--berry-d);font-size:clamp(2.4rem,5.5vh,3.6rem);margin:8px 0 8px;}
+  .start-card .big-emoji{font-size:clamp(6rem,14vh,10rem);line-height:1;margin-bottom:12px;}
+  .start-card h2{font-family:'Jua';color:var(--berry-d);font-size:clamp(3rem,7vh,4.6rem);margin:10px 0 10px;}
   .start-card p.s-sub{font-family:'Nanum Gothic';font-weight:700;color:#7c6d65;font-size:clamp(1.4rem,3vh,2rem);margin:0 0 24px;}
-  .start-card .big-btn{font-family:'Jua';font-size:clamp(1.6rem,3.8vh,2.4rem);border:none;cursor:pointer;color:#fff;
+  .start-card .big-btn{font-family:'Jua';font-size:clamp(2rem,4.5vh,3rem);border:none;cursor:pointer;color:#fff;
     background:var(--grass);border-radius:20px;padding:clamp(16px,2.5vh,24px) clamp(32px,5vw,48px);box-shadow:0 6px 0 var(--grass-d);transition:.12s;}
   .start-card .big-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--grass-d);}
   /* 학습목표 안내 박스 (백워드 설계) */
   .goal-box{background:#fff8e1;border:3px solid var(--sun);border-radius:20px;
     padding:clamp(14px,2.5vh,24px) clamp(18px,3vw,30px);margin:clamp(10px,2vh,18px) 0 clamp(16px,2.5vh,24px);
     box-shadow:0 4px 0 rgba(245,147,0,.2);max-width:640px;}
-  .goal-title{font-family:'Jua';color:var(--berry-d);font-size:clamp(1.3rem,3vh,1.9rem);
+  .goal-title{font-family:'Jua';color:var(--berry-d);font-size:clamp(1.7rem,3.8vh,2.5rem);
     margin-bottom:clamp(8px,1.5vh,14px);}
   .goal-list{list-style:none;padding:0;margin:0;text-align:left;display:flex;flex-direction:column;gap:clamp(6px,1.2vh,12px);}
-  .goal-list li{font-family:'Nanum Gothic';font-weight:700;color:#5a4d47;
-    font-size:clamp(1.15rem,2.6vh,1.65rem);padding-left:2em;position:relative;line-height:1.4;word-break:keep-all;}
+  .goal-list li{font-family:'Nanum Gothic';font-weight:800;color:#5a4d47;
+    font-size:clamp(1.45rem,3.3vh,2.1rem);padding-left:2em;position:relative;line-height:1.45;word-break:keep-all;}
   .goal-list li::before{content:'✅';position:absolute;left:0;top:0;font-size:1.1em;}
   .goal-list li b{color:var(--berry-d);}
   .name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin:8px 0 18px;}
@@ -810,7 +817,7 @@ function goNameSelect(){
   homeFab.classList.add('hidden');
   document.querySelector('header').style.display='';
   subtitle.textContent='누구인가요?';
-  const options=['<option value="">-- 이름을 골라요 --</option>',
+  const buildOptions=()=>['<option value="">-- 이름을 골라요 --</option>',
     ...STUDENT_NAMES.map(n=>`<option value="${n}">${n}</option>`),
     '<option value="">손님 🙂</option>'
   ].join('');
@@ -820,7 +827,7 @@ function goNameSelect(){
       <h2>이름을 골라요</h2>
       <p class="s-sub">아래에서 이름을 선택하세요</p>
       <div class="name-select-wrap">
-        <select class="name-select" id="nameSelect">${options}</select>
+        <select class="name-select" id="nameSelect">${buildOptions()}</select>
         <span class="name-select-arrow">▼</span>
       </div>
       <button class="big-btn" id="nameConfirm" disabled>확인 ✅</button>
@@ -828,6 +835,10 @@ function goNameSelect(){
   const sel=document.getElementById('nameSelect');
   const btn=document.getElementById('nameConfirm');
   speakGuide('이름을 골라요. 아래에서 이름을 선택하세요');
+  // 시트에서 이름을 아직 못 불러왔다면 다시 시도 후 드롭다운 갱신
+  if(SHEET_API_URL && SHEET_API_URL!=='__SHEET_API_URL__'){
+    loadFromSheet().then(()=>{ if(document.getElementById('nameSelect')===sel) sel.innerHTML=buildOptions(); });
+  }
   sel.addEventListener('change',()=>{
     btn.disabled=false;
     speakGuide(sel.value ? sel.value+'!' : '이름을 골라요');

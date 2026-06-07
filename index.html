@@ -424,6 +424,17 @@
   .start-card .big-btn{font-family:'Jua';font-size:clamp(1.6rem,3.8vh,2.4rem);border:none;cursor:pointer;color:#fff;
     background:var(--grass);border-radius:20px;padding:clamp(16px,2.5vh,24px) clamp(32px,5vw,48px);box-shadow:0 6px 0 var(--grass-d);transition:.12s;}
   .start-card .big-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--grass-d);}
+  /* 학습목표 안내 박스 (백워드 설계) */
+  .goal-box{background:#fff8e1;border:3px solid var(--sun);border-radius:20px;
+    padding:clamp(14px,2.5vh,24px) clamp(18px,3vw,30px);margin:clamp(10px,2vh,18px) 0 clamp(16px,2.5vh,24px);
+    box-shadow:0 4px 0 rgba(245,147,0,.2);max-width:640px;}
+  .goal-title{font-family:'Jua';color:var(--berry-d);font-size:clamp(1.3rem,3vh,1.9rem);
+    margin-bottom:clamp(8px,1.5vh,14px);}
+  .goal-list{list-style:none;padding:0;margin:0;text-align:left;display:flex;flex-direction:column;gap:clamp(6px,1.2vh,12px);}
+  .goal-list li{font-family:'Nanum Gothic';font-weight:700;color:#5a4d47;
+    font-size:clamp(1.15rem,2.6vh,1.65rem);padding-left:2em;position:relative;line-height:1.4;word-break:keep-all;}
+  .goal-list li::before{content:'✅';position:absolute;left:0;top:0;font-size:1.1em;}
+  .goal-list li b{color:var(--berry-d);}
   .name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin:8px 0 18px;}
   .name-btn{font-family:'Jua';font-size:1.25rem;border:none;cursor:pointer;background:#fff;color:var(--ink);
     border:3px solid var(--sky);border-radius:18px;padding:16px 10px;box-shadow:0 5px 0 rgba(0,0,0,.1);transition:.12s;}
@@ -772,17 +783,24 @@ soundToggle.addEventListener('click',()=>{
 // ① 첫 화면(인트로)
 function goIntro(){
   homeFab.classList.add('hidden');
-  subtitle.textContent='받침을 배우러 가볼까요?';
+  document.querySelector('header').style.display='none';
   view.innerHTML=`
     <div class="start-card">
       <div class="big-emoji">🐢✨</div>
       <h2>받침 놀이터</h2>
-      <p class="s-sub">받침이 있는 글자를 듣고, 말하고, 써 봐요!</p>
+      <div class="goal-box">
+        <div class="goal-title">🎯 오늘 배우면 이런 걸 할 수 있어요!</div>
+        <ul class="goal-list">
+          <li>받침의 <b>끝소리</b>를 듣고 <b>구별할 수 있어요</b></li>
+          <li>끝소리가 같은 낱말끼리 <b>모을 수 있어요</b></li>
+          <li>받침이 있는 글자를 <b>또박또박 쓸 수 있어요</b></li>
+        </ul>
+      </div>
       <button class="big-btn" id="introStart">시작하기 ▶</button>
     </div>`;
   // 버튼 클릭 시 현재 화면 안내 읽기 + 다음 화면으로
   document.getElementById('introStart').addEventListener('click',()=>{
-    speakGuide('받침이 있는 글자를 듣고, 말하고, 써 봐요!');
+    speakGuide('오늘 받침의 끝소리를 듣고 구별하고, 같은 소리끼리 모으고, 받침이 있는 글자를 또박또박 쓸 수 있어요!');
     goNameSelect();
   });
 }
@@ -790,6 +808,7 @@ function goIntro(){
 // ② 학생 이름 선택
 function goNameSelect(){
   homeFab.classList.add('hidden');
+  document.querySelector('header').style.display='';
   subtitle.textContent='누구인가요?';
   const options=['<option value="">-- 이름을 골라요 --</option>',
     ...STUDENT_NAMES.map(n=>`<option value="${n}">${n}</option>`),
@@ -865,6 +884,7 @@ function goMicPermission(){
 /* ===== 받침 고르기 화면 ===== */
 function goGrid(){
   curIdx=-1; homeFab.classList.add('hidden');
+  document.querySelector('header').style.display='';
   subtitle.textContent = studentName ? `${studentName}님, 받침 친구를 골라 보세요` : '받침 친구를 골라 소리를 들어 봐요';
   const allOk=LESSON.every(l=>completed[l.jong]);
   let cards=LESSON.map((l,i)=>`

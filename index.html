@@ -89,6 +89,58 @@
     padding:clamp(5px,1vh,9px) clamp(12px,2vw,18px);
     font-family:'Jua';color:var(--sky-d);font-size:clamp(1rem,2.2vh,1.4rem);
     box-shadow:0 3px 0 rgba(91,170,230,.25);z-index:10;white-space:nowrap;max-width:38vw;overflow:hidden;text-overflow:ellipsis;}
+  /* 통계 버튼 (헤더 왼쪽 위) */
+  .stats-btn{position:absolute;left:clamp(6px,1.5vw,16px);top:50%;transform:translateY(-50%);
+    background:#fff;border:3px solid var(--grass);border-radius:50%;
+    width:clamp(40px,6vh,52px);height:clamp(40px,6vh,52px);font-size:clamp(1.1rem,2.5vh,1.5rem);
+    cursor:pointer;box-shadow:0 3px 0 rgba(95,199,123,.3);transition:.12s;z-index:10;}
+  .stats-btn:active{transform:translateY(-50%) scale(.92);}
+  /* 사이드바 오버레이 */
+  .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:90;
+    opacity:0;pointer-events:none;transition:opacity .25s;}
+  .sidebar-overlay.show{opacity:1;pointer-events:auto;}
+  /* 사이드바 본체 */
+  .sidebar{position:fixed;top:0;left:0;height:100dvh;width:min(440px,88vw);
+    background:var(--card);box-shadow:6px 0 24px rgba(0,0,0,.18);z-index:100;
+    transform:translateX(-105%);transition:transform .28s cubic-bezier(.3,1,.4,1);
+    display:flex;flex-direction:column;overflow:hidden;}
+  .sidebar.show{transform:translateX(0);}
+  .sb-head{display:flex;align-items:center;justify-content:space-between;
+    padding:clamp(14px,2.5vh,22px) clamp(16px,3vw,24px);background:linear-gradient(120deg,var(--sun),#ffc94d);flex-shrink:0;}
+  .sb-title{font-family:'Jua';font-size:clamp(1.4rem,3vh,1.9rem);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.12);}
+  .sb-close{background:rgba(255,255,255,.35);border:none;color:#fff;width:36px;height:36px;border-radius:50%;
+    font-size:1.2rem;cursor:pointer;font-weight:800;line-height:1;}
+  .sb-close:active{transform:scale(.9);}
+  .sb-tabs{display:flex;gap:0;flex-shrink:0;border-bottom:3px solid #efe7df;}
+  .sb-tab{flex:1;background:none;border:none;cursor:pointer;padding:clamp(10px,2vh,16px);
+    font-family:'Jua';font-size:clamp(1rem,2.2vh,1.35rem);color:#a99c90;
+    border-bottom:4px solid transparent;margin-bottom:-3px;transition:.12s;}
+  .sb-tab.on{color:var(--berry-d);border-bottom-color:var(--berry);}
+  .sb-body{flex:1;overflow-y:auto;padding:clamp(14px,2.5vh,22px) clamp(14px,3vw,22px);min-height:0;}
+  .sb-loading{text-align:center;color:#a99c90;font-family:'Nanum Gothic';font-weight:700;
+    font-size:clamp(1rem,2.2vh,1.3rem);padding:40px 0;}
+  /* 통계 요약 카드 */
+  .stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1.5vw,14px);margin-bottom:clamp(14px,2.5vh,22px);}
+  .stat-card{background:#fff;border-radius:16px;padding:clamp(12px,2vh,18px);text-align:center;box-shadow:0 3px 0 rgba(0,0,0,.06);}
+  .stat-card .num{font-family:'Jua';font-size:clamp(1.8rem,4vh,2.8rem);color:var(--sky-d);line-height:1;}
+  .stat-card .lbl{font-family:'Nanum Gothic';font-weight:700;color:#8a7b73;font-size:clamp(.9rem,1.8vh,1.1rem);margin-top:6px;}
+  .sb-section-title{font-family:'Jua';font-size:clamp(1.1rem,2.4vh,1.5rem);color:var(--berry-d);margin:clamp(10px,2vh,18px) 0 clamp(6px,1.2vh,12px);}
+  /* 학생 목록 행 */
+  .stu-row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;
+    padding:clamp(9px,1.6vh,14px) clamp(12px,2vw,16px);margin-bottom:clamp(6px,1.2vh,10px);box-shadow:0 2px 0 rgba(0,0,0,.05);}
+  .stu-row .stu-name{font-family:'Jua';font-size:clamp(1rem,2.2vh,1.35rem);color:var(--ink);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .stu-row .stu-meta{font-family:'Nanum Gothic';font-weight:700;color:#8a7b73;font-size:clamp(.85rem,1.7vh,1.05rem);white-space:nowrap;}
+  .stu-row .stu-bar{flex:0 0 90px;height:12px;background:#efe7df;border-radius:99px;overflow:hidden;}
+  .stu-row .stu-bar > i{display:block;height:100%;background:var(--grass);border-radius:99px;transition:width .4s;}
+  /* 받침별 진행 */
+  .jong-stat{display:flex;align-items:center;gap:10px;margin-bottom:clamp(6px,1.2vh,10px);}
+  .jong-stat .js-badge{width:clamp(34px,5vh,46px);height:clamp(34px,5vh,46px);border-radius:12px;
+    display:grid;place-items:center;font-family:'Jua';font-size:clamp(1.1rem,2.6vh,1.6rem);flex-shrink:0;}
+  .jong-stat .js-bar{flex:1;height:14px;background:#efe7df;border-radius:99px;overflow:hidden;}
+  .jong-stat .js-bar > i{display:block;height:100%;border-radius:99px;transition:width .4s;}
+  .jong-stat .js-num{font-family:'Nanum Gothic';font-weight:800;color:#8a7b73;font-size:clamp(.85rem,1.7vh,1.05rem);min-width:42px;text-align:right;}
+  .sb-empty{text-align:center;color:#bbab9f;font-family:'Nanum Gothic';font-weight:700;padding:30px 0;font-size:clamp(.95rem,2vh,1.2rem);}
+  .sb-note{font-family:'Nanum Gothic';font-weight:700;color:#bbab9f;font-size:clamp(.8rem,1.6vh,1rem);text-align:center;margin-top:16px;line-height:1.5;}
   header h1{margin:0;font-size:clamp(2rem,5vh,3.2rem);letter-spacing:2px;color:var(--berry-d);
     text-shadow:3px 3px 0 #fff, 5px 5px 0 rgba(0,0,0,.08);}
   header h1 .b{color:var(--sky-d);}
@@ -518,6 +570,7 @@
 
 <div class="wrap">
   <header>
+    <button class="stats-btn" id="statsBtn" title="학습 통계 보기" aria-label="학습 통계">📊</button>
     <span class="name-chip" id="nameChip" style="display:none"></span>
     <button class="sound-toggle on" id="soundToggle" title="소리 켜기/끄기" aria-label="소리 켜기 끄기">🔊</button>
     <h1>받침 <span class="b">놀이터</span> 🐢</h1>
@@ -526,6 +579,22 @@
   <div id="view"></div>
 </div>
 <button class="home-fab hidden" id="homeFab">🏠 받침 고르기</button>
+
+<!-- 학습 통계 사이드바 -->
+<div class="sidebar-overlay" id="sbOverlay"></div>
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <div class="sb-head">
+    <span class="sb-title">📊 학습 통계</span>
+    <button class="sb-close" id="sbClose" aria-label="닫기">✕</button>
+  </div>
+  <div class="sb-tabs">
+    <button class="sb-tab on" id="sbTabClass">👩‍🏫 우리 반</button>
+    <button class="sb-tab" id="sbTabMe">🙋 내 기록</button>
+  </div>
+  <div class="sb-body" id="sbBody">
+    <div class="sb-loading">불러오는 중… ⏳</div>
+  </div>
+</aside>
 
 <script>
 /* ════════════════════════════════════════════════════════════════
@@ -1108,7 +1177,9 @@ function renderExplore(l){
         document.querySelectorAll('.ex-card').forEach(x=>x.classList.remove('lit'));
         c.classList.add('lit','heard');
         speak(o.w,.78);
+        const firstTime=!readWords.has(o.w);
         readWords.add(o.w);
+        if(firstTime) logWord('듣기', o.w, {heard:'(들음)', ok:true});
         if(readWords.size>=total){ checkAllRead(); }
         else{ note.innerHTML=`잘 들었어요! 남은 낱말도 들어 볼까요? (${readWords.size}/${total})`; }
       });
@@ -1471,6 +1542,20 @@ function logToSheet(payload){
     });
   }catch(e){ console.warn('시트 기록 실패:',e); }
 }
+// 낱말 학습 기록 헬퍼 (활동·받침 자동 포함)
+function logWord(act, word, opt){
+  opt=opt||{};
+  const l=LESSON[curIdx];
+  logToSheet({
+    name: studentName||'(손님)',
+    act: act,                       // '듣기' | '말하기' | '쓰기'
+    word: word,
+    jong: l ? l.jong : '',
+    heard: opt.heard||'',
+    ok: opt.ok!==false,
+    time: new Date().toLocaleString('ko-KR')
+  });
+}
 
 function renderSay(l){
   if(sayWordIdx>=l.ex.length) sayWordIdx=0;
@@ -1559,8 +1644,8 @@ function renderSay(l){
         heardBox.innerHTML=`내가 말한 말: <b>${heard||'(잘 안 들렸어요)'}</b>`;
         heardBox.className='heard-box '+(matched?'ok':'no');
 
-        // 시트 기록
-        logToSheet({ name:studentName||'(손님)', word:word.w, heard:heard, ok:matched, time:new Date().toLocaleString('ko-KR') });
+        // 시트 기록 — 학생이 실제로 말한(인식된) 내용을 그대로 저장
+        logWord('말하기', word.w, {heard: heard || '(인식 안 됨)', ok:matched});
 
         if(matched){
           passed=true;
@@ -1626,7 +1711,7 @@ function renderSay(l){
             recAudio=new Audio(recURL);
             playB.disabled=false;
             rmsg.textContent='녹음 완료! 내 소리를 듣고 별표로 평가해 봐요 🎧';
-            logToSheet({ name:studentName||'(손님)', word:word.w, heard:'(녹음)', ok:true, time:new Date().toLocaleString('ko-KR') });
+            logWord('말하기', word.w, {heard:'(녹음)', ok:true});
             // 별표 평가 영역 표시 + 자동 재생
             if(selfRate) selfRate.style.display='block';
             if(recAudio){ setTimeout(()=>recAudio.play(),300); }
@@ -1660,7 +1745,7 @@ function renderSay(l){
       if(recAudio){recAudio.currentTime=0;recAudio.play();}
     });
     document.getElementById('srGoB')?.addEventListener('click',()=>{
-      logToSheet({ name:studentName||'(손님)', word:word.w, heard:'(별 '+myStars+'개)', ok:true, time:new Date().toLocaleString('ko-KR') });
+      logWord('말하기', word.w, {heard:'(별 '+myStars+'개)', ok:true});
       stopRec();
       if(isLast){sayWordIdx=0;step=2;renderDetail();}
       else{sayWordIdx++;renderSay(l);}
@@ -1676,7 +1761,7 @@ function renderSay(l){
   const skipB=document.getElementById('skipB');
   if(skipB){
     skipB.addEventListener('click',()=>{
-      logToSheet({name:studentName||'(손님)', word:word.w, heard:'(건너뜀)', ok:false, time:new Date().toLocaleString('ko-KR')});
+      logWord('말하기', word.w, {heard:'(건너뜀)', ok:false});
       stopRec();
       if(isLast){sayWordIdx=0;step=2;renderDetail();}
       else{sayWordIdx++;renderSay(l);}
@@ -2060,6 +2145,7 @@ function renderWrite(l){
       traceB.classList.add('checked'); traceB.textContent='✅ 따라 썼어요';
       wmsg.textContent=`참 잘했어요! "${word.w}" 을(를) 따라 썼어요 🎉`;
       wNextB.disabled=false;
+      logWord('쓰기', word.w, {heard:'(따라 씀)', ok:true});
     });
   });
 
@@ -2198,6 +2284,7 @@ function applySheetRows(rows){
 }
 
 // Apps Script 웹앱 호출 → 시트 데이터 가져오기
+let sheetRecords=[];  // 학습 기록 (통계용)
 async function loadFromSheet(){
   if(!SHEET_API_URL || SHEET_API_URL==='__SHEET_API_URL__') return false;
   try{
@@ -2206,12 +2293,162 @@ async function loadFromSheet(){
     if(Array.isArray(data.names)&&data.names.length){
       STUDENT_NAMES.splice(0,STUDENT_NAMES.length,...data.names);
     }
+    if(Array.isArray(data.records)) sheetRecords=data.records;
     const rows=Array.isArray(data)?data:(data.rows||[]);
     if(rows.length){applySheetRows(rows);return true;}
   }catch(e){
     console.warn('시트 불러오기 실패, 기본 데이터 사용:',e);
   }
   return false;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   학습 통계 사이드바
+   ════════════════════════════════════════════════════════════════ */
+const sidebar=document.getElementById('sidebar');
+const sbOverlay=document.getElementById('sbOverlay');
+const sbBody=document.getElementById('sbBody');
+const sbTabClass=document.getElementById('sbTabClass');
+const sbTabMe=document.getElementById('sbTabMe');
+let sbTab='class';
+
+function openSidebar(){
+  sidebar.classList.add('show');
+  sbOverlay.classList.add('show');
+  sidebar.setAttribute('aria-hidden','false');
+  loadStatsAndRender();
+}
+function closeSidebar(){
+  sidebar.classList.remove('show');
+  sbOverlay.classList.remove('show');
+  sidebar.setAttribute('aria-hidden','true');
+}
+document.getElementById('statsBtn').addEventListener('click',openSidebar);
+document.getElementById('sbClose').addEventListener('click',closeSidebar);
+sbOverlay.addEventListener('click',closeSidebar);
+sbTabClass.addEventListener('click',()=>{sbTab='class';sbTabClass.classList.add('on');sbTabMe.classList.remove('on');renderStats();});
+sbTabMe.addEventListener('click',()=>{sbTab='me';sbTabMe.classList.add('on');sbTabClass.classList.remove('on');renderStats();});
+
+async function loadStatsAndRender(){
+  sbBody.innerHTML='<div class="sb-loading">불러오는 중… ⏳</div>';
+  if(SHEET_API_URL && SHEET_API_URL!=='__SHEET_API_URL__'){
+    await loadFromSheet();  // 최신 기록 다시 불러오기
+  }
+  renderStats();
+}
+
+// 단어 → 받침 대표음 매핑 (LESSON 기반)
+function wordToJong(word){
+  for(const l of LESSON){
+    if(l.ex.some(o=>o.w===word)) return l;
+  }
+  return null;
+}
+
+function renderStats(){
+  const recs=sheetRecords||[];
+  if(SHEET_API_URL==='__SHEET_API_URL__'){
+    sbBody.innerHTML=`<div class="sb-empty">구글 시트가 연결되면<br>학습 통계를 볼 수 있어요 📊</div>
+      <p class="sb-note">배포 후 시트가 연동되면<br>학생들의 따라 말하기 기록이 모여요.</p>`;
+    return;
+  }
+  if(!recs.length){
+    sbBody.innerHTML=`<div class="sb-empty">아직 학습 기록이 없어요 🌱<br>따라 말하기를 하면 기록이 모여요!</div>`;
+    return;
+  }
+  if(sbTab==='class') renderClassStats(recs);
+  else renderMyStats(recs);
+}
+
+// 👩‍🏫 우리 반 통계
+function renderClassStats(recs){
+  const okRecs=recs.filter(r=>r.ok);
+  const students=[...new Set(recs.map(r=>r.name).filter(Boolean))];
+  const totalTries=recs.length;
+  const totalOk=okRecs.length;
+  // 학생별 집계
+  const byStudent={};
+  recs.forEach(r=>{
+    if(!r.name) return;
+    if(!byStudent[r.name]) byStudent[r.name]={tries:0,ok:0,words:new Set()};
+    byStudent[r.name].tries++;
+    if(r.ok){ byStudent[r.name].ok++; byStudent[r.name].words.add(r.word); }
+  });
+  // 받침별 집계
+  const byJong={};
+  LESSON.forEach(l=>byJong[l.jong]={l,ok:0,tries:0});
+  recs.forEach(r=>{
+    const l=wordToJong(r.word);
+    if(l && byJong[l.jong]){ byJong[l.jong].tries++; if(r.ok) byJong[l.jong].ok++; }
+  });
+
+  const stuRows=students.map(n=>{
+    const s=byStudent[n];
+    const rate=s.tries? Math.round(s.ok/s.tries*100):0;
+    return `<div class="stu-row">
+      <span class="stu-name">🙋 ${n}</span>
+      <span class="stu-bar"><i style="width:${rate}%"></i></span>
+      <span class="stu-meta">${s.ok}번 완료</span>
+    </div>`;
+  }).join('') || '<div class="sb-empty">학생 기록이 없어요</div>';
+
+  const jongRows=LESSON.map(l=>{
+    const j=byJong[l.jong];
+    const rate=j.tries? Math.round(j.ok/j.tries*100):0;
+    return `<div class="jong-stat">
+      <span class="js-badge" style="background:${l.cb};color:${l.c}">${l.jong}</span>
+      <span class="js-bar"><i style="width:${rate}%;background:${l.c}"></i></span>
+      <span class="js-num">${j.ok}/${j.tries}</span>
+    </div>`;
+  }).join('');
+
+  sbBody.innerHTML=`
+    <div class="stat-cards">
+      <div class="stat-card"><div class="num">${students.length}</div><div class="lbl">참여 학생</div></div>
+      <div class="stat-card"><div class="num">${totalOk}</div><div class="lbl">완료한 낱말</div></div>
+    </div>
+    <div class="sb-section-title">🙋 학생별 기록</div>
+    ${stuRows}
+    <div class="sb-section-title">🔤 받침별 진행</div>
+    ${jongRows}
+    <p class="sb-note">완료율 = 따라 말하기 성공 ÷ 시도</p>`;
+}
+
+// 🙋 내 기록
+function renderMyStats(recs){
+  if(!studentName){
+    sbBody.innerHTML=`<div class="sb-empty">먼저 이름을 선택해 주세요 🙋</div>`;
+    return;
+  }
+  const mine=recs.filter(r=>r.name===studentName);
+  if(!mine.length){
+    sbBody.innerHTML=`<div class="sb-empty">${studentName}님의 기록이<br>아직 없어요 🌱</div>`;
+    return;
+  }
+  const ok=mine.filter(r=>r.ok);
+  const okWords=[...new Set(ok.map(r=>r.word))];
+  // 받침별 완료 개수
+  const byJong={};
+  LESSON.forEach(l=>byJong[l.jong]={l,ok:0,total:l.ex.length});
+  ok.forEach(r=>{ const l=wordToJong(r.word); if(l&&byJong[l.jong]) byJong[l.jong].ok++; });
+  const jongRows=LESSON.map(l=>{
+    const j=byJong[l.jong];
+    const rate=j.total? Math.round(Math.min(j.ok,j.total)/j.total*100):0;
+    return `<div class="jong-stat">
+      <span class="js-badge" style="background:${l.cb};color:${l.c}">${l.jong}</span>
+      <span class="js-bar"><i style="width:${rate}%;background:${l.c}"></i></span>
+      <span class="js-num">${Math.min(j.ok,j.total)}/${j.total}</span>
+    </div>`;
+  }).join('');
+
+  sbBody.innerHTML=`
+    <div class="stat-cards">
+      <div class="stat-card"><div class="num">${okWords.length}</div><div class="lbl">완료한 낱말</div></div>
+      <div class="stat-card"><div class="num">${mine.length}</div><div class="lbl">연습 횟수</div></div>
+    </div>
+    <div class="sb-section-title">🔤 받침별 내 진행</div>
+    ${jongRows}
+    <p class="sb-note">${studentName}님, 잘하고 있어요! 🎉</p>`;
 }
 
 async function startApp(){

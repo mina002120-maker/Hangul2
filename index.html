@@ -167,6 +167,7 @@
   .prog-label{font-family:'Nanum Gothic';font-weight:800;color:#8a7b73;font-size:clamp(1rem,2.2vh,1.4rem);}
   .prog-label b{color:var(--berry-d);font-size:1.2em;}
   .finish-card.all .finish-msg b{color:var(--berry-d);}
+  .finish-card .row-btns .btn{white-space:nowrap;}
 
   #stepBody{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
 
@@ -615,7 +616,7 @@ const STROKES={
   'ㅁ':['M26,22 V78', 'M26,22 H74 L74,78', 'M26,78 H74'], // ① 왼세로 ② 윗가로+오른세로 ③ 아래가로
   'ㅂ':['M28,20 V80', 'M72,20 V80', 'M28,50 H72', 'M28,80 H72'], // ① 왼세로 ② 오른세로 ③ 중간가로 ④ 아래가로
   'ㅅ':['M50,22 L26,80', 'M50,22 L74,80'],           // ① 왼삐침 ② 오른삐침
-  'ㅇ':['M50,31 A21,21 0 0,0 50,73 A21,21 0 0,0 50,31'], // 동그라미 (위 가운데 시작, 반시계)
+  'ㅇ':['M50,30 A20,20 0 0,0 50,70 A20,20 0 0,0 50,30'], // 동그라미 (위 가운데 시작, 반시계, 중심50)
   'ㅈ':['M24,28 H76 L30,80', 'M52,50 L78,80'], // ① 가로+왼삐침(한 획) ② 오른삐침
   'ㅊ':['M44,14 L60,14', 'M26,30 H74', 'M50,30 L28,82', 'M50,30 L74,82'], // ① 꼭지 ② 가로 ③④ 삐침
   'ㅋ':['M22,24 H74 L74,78', 'M30,50 H62'],          // ① ㄱ ② 가운데 가로
@@ -651,7 +652,7 @@ function glyphBox(j,batchim,strokeStart,clickable){
   const paths=STROKES[j]||[];
   const ghost=paths.map(d=>`<path class="ghost" d="${d}" fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
   const ink=paths.map((d,i)=>`<path class="ink" data-order="${(strokeStart||0)+i}" d="${d}" fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
-  const clickAttr=clickable?` data-jamo="${j}" class="glyph-box${batchim?' batchim':''} jamo-click" title="${j} 쓰는 순서 보기"`:` class="glyph-box${batchim?' batchim':''}"`;
+  const clickAttr=clickable?` data-jamo="${j}" class="glyph-box${batchim?' batchim':''} jamo-click"`:` class="glyph-box${batchim?' batchim':''}"`;
   return `<div${clickAttr}><svg viewBox="0 0 100 100">${ghost}${ink}</svg></div>`;
 }
 // 가로 모음(초성 아래에 오는 모음): ㅗ ㅛ ㅜ ㅠ ㅡ

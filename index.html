@@ -481,13 +481,13 @@
   .start-card .big-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--grass-d);}
   /* 학습목표 안내 박스 (백워드 설계) */
   .goal-box{background:#fff8e1;border:3px solid var(--sun);border-radius:20px;
-    padding:clamp(14px,2.5vh,24px) clamp(18px,3vw,30px);margin:clamp(10px,2vh,18px) 0 clamp(16px,2.5vh,24px);
-    box-shadow:0 4px 0 rgba(245,147,0,.2);max-width:640px;}
+    padding:clamp(14px,2.5vh,24px) clamp(20px,3.5vw,40px);margin:clamp(10px,2vh,18px) 0 clamp(16px,2.5vh,24px);
+    box-shadow:0 4px 0 rgba(245,147,0,.2);max-width:min(94vw,920px);}
   .goal-title{font-family:'Jua';color:var(--berry-d);font-size:clamp(1.7rem,3.8vh,2.5rem);
-    margin-bottom:clamp(8px,1.5vh,14px);}
+    margin-bottom:clamp(8px,1.5vh,14px);text-align:center;}
   .goal-list{list-style:none;padding:0;margin:0;text-align:left;display:flex;flex-direction:column;gap:clamp(6px,1.2vh,12px);}
   .goal-list li{font-family:'Nanum Gothic';font-weight:800;color:#5a4d47;
-    font-size:clamp(1.45rem,3.3vh,2.1rem);padding-left:2em;position:relative;line-height:1.45;word-break:keep-all;}
+    font-size:clamp(1.3rem,3vh,1.9rem);padding-left:1.8em;position:relative;line-height:1.4;white-space:nowrap;}
   .goal-list li::before{content:'✅';position:absolute;left:0;top:0;font-size:1.1em;}
   .goal-list li b{color:var(--berry-d);}
   .name-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin:8px 0 18px;}
@@ -591,7 +591,7 @@ function decompose(ch){
 let LESSON=[
   {jong:'ㄱ',name:'기역',sound:'윽',c:'#e8556a',cb:'#ffe1e6',letters:['ㄱ','ㅋ'],
    explain:'받침 <b>ㄱ</b>과 <b>ㅋ</b>은 글자 모양은 달라 보이지만,<br>낱말 끝에 오면 둘 다 혀 뒤쪽이 입천장에 붙으며<br><b>[윽]</b> 소리로 끝나요!',
-   ex:[{w:'낙타',e:'🐫',hi:'ㄱ',hs:0},{w:'독수리',e:'🦅',hi:'ㄱ',hs:0},{w:'부엌',e:'🍳',hi:'ㅋ',hs:1},{w:'키읔',e:'🔡',hi:'ㅋ',hs:1},{w:'목',e:'🦒',hi:'ㄱ',hs:0}]},
+   ex:[{w:'낙타',e:'🐫',hi:'ㄱ',hs:0},{w:'독수리',e:'🦅',hi:'ㄱ',hs:0},{w:'부엌',e:'🍳',hi:'ㅋ',hs:1},{w:'키읔',e:'😆',hi:'ㅋ',hs:1},{w:'목',e:'🦒',hi:'ㄱ',hs:0}]},
   {jong:'ㄴ',
    explain:'받침 <b>ㄴ</b>은 혀끝이 윗니 뒤에 살짝 닿으면서<br><b>[은]</b> 소리가 나요.<br>낱말 끝에서 혀끝을 대보세요!',name:'니은',sound:'은',c:'#f59300',cb:'#fff0d6',letters:['ㄴ'],
    ex:[{w:'반지',e:'💍',hi:'ㄴ',hs:0},{w:'화분',e:'🪴',hi:'ㄴ',hs:1},{w:'눈',e:'❄️',hi:'ㄴ',hs:0},{w:'산',e:'⛰️',hi:'ㄴ',hs:0}]},
@@ -2096,8 +2096,41 @@ function renderWrite(l){
       wmsg.textContent=`참 잘했어요! "${word.w}" 을(를) 따라 썼어요 🎉`;
       wNextB.disabled=false;
       logWord('쓰기', word.w, {heard:'(따라 씀)', ok:true});
+      confetti();
+      // 잘 썼다는 칭찬 팝업 → 다음 낱말로 넘어가는 버튼
+      showWriteFeedback(word, isLast);
     });
   });
+
+  // 따라쓰기 완료 칭찬 팝업
+  function showWriteFeedback(word, isLast){
+    const ov=document.createElement('div');
+    ov.className='trace-overlay';
+    ov.innerHTML=`
+      <div class="trace-modal" style="max-width:min(94vw,560px)">
+        <div style="font-size:clamp(3.5rem,10vh,5.5rem);line-height:1">🎉</div>
+        <p class="tm-title" style="color:var(--grass-d)">참 잘 썼어요!</p>
+        <p class="tm-sub">"<b style="color:${l.c}">${word.w}</b>" 을(를) 또박또박 따라 썼어요 ✍️</p>
+        <div class="tm-btns" style="justify-content:center;margin-top:16px">
+          <button class="btn next" id="wfNext" style="background:var(--grass)">
+            ${isLast?'마지막 낱말이에요! ✅':'다음 낱말 쓰러 가기 ➡'}
+          </button>
+        </div>
+      </div>`;
+    document.body.appendChild(ov);
+    speakGuide('참 잘 썼어요! '+word.w+'을 또박또박 따라 썼어요');
+    ov.querySelector('#wfNext').addEventListener('click',()=>{
+      ov.remove();
+      if(isLast){
+        writeWordIdx=0;
+        completed[LESSON[curIdx].jong]=true;
+        renderNotebook(l, finishDetail);
+      }else{
+        writeWordIdx++;
+        renderWrite(l);
+      }
+    });
+  }
 
   document.getElementById('wPrevB').addEventListener('click',()=>{
     if(writeWordIdx===0){step=1;renderDetail();}
@@ -2280,4 +2313,3 @@ async function startApp(){
 }
 startApp();
 </script>
-

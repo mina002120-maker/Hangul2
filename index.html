@@ -479,6 +479,25 @@
   .start-card .big-btn{font-family:'Jua';font-size:clamp(2rem,4.5vh,3rem);border:none;cursor:pointer;color:#fff;
     background:var(--grass);border-radius:20px;padding:clamp(16px,2.5vh,24px) clamp(32px,5vw,48px);box-shadow:0 6px 0 var(--grass-d);transition:.12s;}
   .start-card .big-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--grass-d);}
+  /* 선생님 설정 (시작하기 버튼 바로 아래) */
+  .teacher-toggle{margin-top:clamp(14px,2.5vh,22px);background:none;border:none;
+    color:#a99c90;font-family:'Nanum Gothic';font-weight:700;font-size:clamp(.9rem,1.8vh,1.05rem);
+    cursor:pointer;text-decoration:underline;padding:6px 10px;}
+  .teacher-panel{margin-top:10px;background:#faf7f2;border:2px solid #ece4d8;border-radius:16px;
+    padding:clamp(14px,2vh,20px);text-align:left;max-width:420px;width:100%;box-sizing:border-box;}
+  .tp-label{font-family:'Nanum Gothic';font-weight:800;color:#5a4d47;font-size:.95rem;margin:0 0 6px;}
+  .tp-input{width:100%;box-sizing:border-box;padding:9px 12px;border:2px solid #e0d6c8;border-radius:10px;
+    font-size:.9rem;font-family:monospace;margin-bottom:8px;color:#5a4d47;}
+  .tp-btn{width:100%;padding:9px;border:none;border-radius:10px;background:var(--sky);color:#fff;
+    font-family:'Jua';font-size:1rem;cursor:pointer;}
+  .tp-btn.alt{background:var(--grass);}
+  .tp-btn:active{transform:translateY(2px);}
+  .tp-msg{font-family:'Nanum Gothic';font-weight:700;font-size:.85rem;margin:8px 0 0;min-height:1.2em;}
+  .tp-msg.ok{color:#3a8a52;}
+  .tp-msg.fail{color:#c0392b;}
+  .tp-msg.loading{color:#8a7b73;}
+  .tp-link-box{margin-top:14px;padding-top:14px;border-top:1px dashed #e0d6c8;}
+  .tp-hint{font-family:'Nanum Gothic';font-size:.8rem;color:#a99c90;margin:6px 0 0;line-height:1.5;}
   /* 학습목표 안내 박스 (백워드 설계) */
   .goal-box{background:#fff8e1;border:3px solid var(--sun);border-radius:20px;
     padding:clamp(14px,2.5vh,24px) clamp(20px,3.5vw,40px);margin:clamp(10px,2vh,18px) 0 clamp(16px,2.5vh,24px);
@@ -536,10 +555,41 @@
 <script>
 /* ════════════════════════════════════════════════════════════════
    ★ 구글 시트 연동 설정 ★
-   Apps Script 웹앱 URL을 아래에 붙여 넣으세요.
-   비워 두면('') 기본 내장 단어로 동작합니다.
+   선생님마다 자기 구글 시트 사본을 연결해서 쓸 수 있습니다.
+   연결 주소는 아래 우선순위로 정해집니다.
+     ① 학생용 입장 주소(#c=...)로 들어온 경우 → 그 주소
+     ② 화면 하단 ⚙️ 설정에서 선생님이 입력해 저장해 둔 주소
+     ③ 둘 다 없으면 → 안내 문구를 보여주고 ⚙️ 설정을 열도록 안내
    ════════════════════════════════════════════════════════════════ */
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbwGwvypeivw2L_A_tzrseOALiOkGbjc_1nRa8qZ2DOpIBSDvkY92-Ui3T-Gc4SyZYlB/exec';
+const SHEET_LINK_STORAGE_KEY = 'batchim_sheet_url';
+
+// 학생용 입장 주소(#c=...)에 담긴 시트 주소를 읽는다.
+function readLinkSheetUrl(){
+  const hash = location.hash || '';
+  const m = hash.match(/[#&]c=([^&]+)/);
+  if (!m) return '';
+  try { return decodeURIComponent(m[1]); } catch(e) { return ''; }
+}
+// 선생님이 ⚙️ 설정에서 저장해 둔 주소를 읽는다.
+function readSavedSheetUrl(){
+  try { return localStorage.getItem(SHEET_LINK_STORAGE_KEY) || ''; }
+  catch(e){ return ''; }
+}
+function saveSheetUrl(url){
+  try { localStorage.setItem(SHEET_LINK_STORAGE_KEY, url); } catch(e){}
+}
+
+// 학생용 링크로 들어왔는지 여부 (이 경우 선생님 설정 버튼을 화면에 만들지 않음)
+const IS_STUDENT_LINK = !!readLinkSheetUrl();
+
+// 실제로 사용할 시트 주소 (위 우선순위 적용)
+let SHEET_API_URL = readLinkSheetUrl() || readSavedSheetUrl() || '';
+
+// 연결 주소가 바뀌었을 때(⚙️ 설정에서 [연결하기]를 누른 경우) 호출
+function setSheetApiUrl(url){
+  SHEET_API_URL = url;
+  if (!IS_STUDENT_LINK) saveSheetUrl(url);
+}
 
 // 연필요정 SVG (말풍선 안내용)
 const PENCIL_FAIRY_SVG = `
@@ -645,7 +695,7 @@ const STROKES={
   'ㅒ':['M36,14 V86', 'M36,38 H62', 'M36,62 H62', 'M72,14 V86'],
   'ㅖ':['M40,14 V86', 'M66,14 V86', 'M40,38 H66', 'M40,62 H66'],
   // 이중(복합) 모음 — 한 칸에 구성 자모 획을 합쳐서 (획순대로)
-  'ㅘ':['M36,24 V50', 'M14,50 H58', 'M70,14 V86', 'M70,46 H92'],          // ㅗ(왼아래) + ㅏ(오른)
+  'ㅘ':['M32,32 V56', 'M12,56 H52', 'M72,14 V86', 'M72,46 H92'],          // ㅗ(왼아래) + ㅏ(오른)
   'ㅙ':['M30,24 V48', 'M12,48 H50', 'M62,14 V86', 'M62,46 H82', 'M90,14 V86'], // ㅗ + ㅐ
   'ㅚ':['M34,22 V50', 'M12,50 H56', 'M74,14 V86'],                        // ㅗ(왼아래) + ㅣ(오른)
   'ㅝ':['M14,42 H58', 'M36,42 V70', 'M70,14 V86', 'M52,50 H70'],          // ㅜ(왼위) + ㅓ(오른)
@@ -857,6 +907,21 @@ function updateNameChip(){
 function goIntro(){
   homeFab.classList.add('hidden');
   document.querySelector('header').style.display='none';
+  // 학생용 입장 주소로 들어온 경우, 선생님 설정 버튼은 아예 화면에 만들지 않는다.
+  const teacherPanelHtml = IS_STUDENT_LINK ? '' : `
+      <button class="teacher-toggle" id="teacherToggle">⚙️ 선생님 설정</button>
+      <div class="teacher-panel" id="teacherPanel" style="display:none">
+        <p class="tp-label">내 구글 시트 주소 연결하기</p>
+        <input type="text" class="tp-input" id="tpUrlInput" placeholder="https://script.google.com/macros/s/.../exec" value="${SHEET_API_URL?SHEET_API_URL.replace(/"/g,'&quot;'):''}">
+        <button class="tp-btn" id="tpConnect">연결하기</button>
+        <p class="tp-msg" id="tpMsg"></p>
+        <div class="tp-link-box" id="tpLinkBox" style="display:none">
+          <p class="tp-label">학생용 입장 주소</p>
+          <input type="text" class="tp-input" id="tpStudentLink" readonly>
+          <button class="tp-btn alt" id="tpCopy">복사</button>
+          <p class="tp-hint">이 주소를 학생들에게 나눠 주세요. 학생이 이 주소로 들어오면 자동으로 선생님 시트에 연결됩니다.</p>
+        </div>
+      </div>`;
   view.innerHTML=`
     <div class="start-card">
       <div class="big-emoji">🐢✨</div>
@@ -870,12 +935,71 @@ function goIntro(){
         </ul>
       </div>
       <button class="big-btn" id="introStart">시작하기 ▶</button>
+      ${teacherPanelHtml}
     </div>`;
   // 버튼 클릭 시 현재 화면 안내 읽기 + 다음 화면으로
   document.getElementById('introStart').addEventListener('click',()=>{
     speakGuide('오늘 받침의 끝소리를 듣고 구별하고, 같은 소리끼리 모으고, 받침이 있는 글자를 또박또박 쓸 수 있어요!');
     goNameSelect();
   });
+  if (!IS_STUDENT_LINK) setupTeacherPanel();
+}
+
+// 선생님 설정 패널 동작 (학생용 링크일 때는 이 함수 자체가 호출되지 않음)
+function setupTeacherPanel(){
+  const toggleBtn = document.getElementById('teacherToggle');
+  const panel = document.getElementById('teacherPanel');
+  const urlInput = document.getElementById('tpUrlInput');
+  const connectBtn = document.getElementById('tpConnect');
+  const msg = document.getElementById('tpMsg');
+  const linkBox = document.getElementById('tpLinkBox');
+  const studentLinkInput = document.getElementById('tpStudentLink');
+  const copyBtn = document.getElementById('tpCopy');
+
+  toggleBtn.addEventListener('click', ()=>{
+    const opening = panel.style.display === 'none';
+    panel.style.display = opening ? '' : 'none';
+    if (opening && SHEET_API_URL) showStudentLink();
+  });
+
+  connectBtn.addEventListener('click', async ()=>{
+    const url = urlInput.value.trim();
+    if (!url){
+      msg.textContent = '시트 주소를 입력해 주세요';
+      msg.className = 'tp-msg fail';
+      return;
+    }
+    msg.textContent = '연결하는 중… ⏳';
+    msg.className = 'tp-msg loading';
+    setSheetApiUrl(url);
+    const ok = await loadFromSheet();
+    msg.textContent = (ok?'✅ ':'⚠️ ') + sheetStatus;
+    msg.className = 'tp-msg ' + (ok?'ok':'fail');
+    if (ok){
+      showStudentLink();
+    }
+  });
+
+  function showStudentLink(){
+    const base = location.origin + location.pathname;
+    const link = base + '#c=' + encodeURIComponent(SHEET_API_URL);
+    studentLinkInput.value = link;
+    linkBox.style.display = '';
+  }
+
+  copyBtn.addEventListener('click', ()=>{
+    studentLinkInput.select();
+    studentLinkInput.setSelectionRange(0, 99999);
+    try{
+      navigator.clipboard.writeText(studentLinkInput.value);
+      copyBtn.textContent = '복사됨 ✓';
+      setTimeout(()=>{ copyBtn.textContent='복사'; }, 1500);
+    }catch(e){
+      document.execCommand('copy');
+    }
+  });
+
+  if (SHEET_API_URL) showStudentLink();
 }
 
 // ② 학생 이름 선택
@@ -904,7 +1028,7 @@ function goNameSelect(){
   const statusEl=document.getElementById('sheetStatus');
   speakGuide('이름을 골라요. 아래에서 이름을 선택하세요');
   // 시트에서 이름을 아직 못 불러왔다면 다시 시도 후 드롭다운 갱신
-  if(SHEET_API_URL && SHEET_API_URL!=='__SHEET_API_URL__'){
+  if(SHEET_API_URL){
     statusEl.textContent='시트와 연결하는 중… ⏳';
     statusEl.className='sheet-status loading';
     loadFromSheet().then(ok=>{
@@ -1481,7 +1605,7 @@ function normKo(s){ return String(s||'').replace(/[^가-힣]/g,''); }
 
 // 따라 말하기 결과를 구글 시트에 기록 (Apps Script로 전송)
 function logToSheet(payload){
-  if(!SHEET_API_URL || SHEET_API_URL==='__SHEET_API_URL__') return;
+  if(!SHEET_API_URL) return;
   try{
     // no-cors: 응답은 못 받지만 기록은 됨
     fetch(SHEET_API_URL, {
@@ -2268,26 +2392,50 @@ function applySheetRows(rows){
 
 // Apps Script 웹앱 호출 → 시트 데이터 가져오기
 let sheetStatus='';   // 연동 진단 메시지
+// 다른 시트 주소에서 자료를 안전하게 받아오기 위한 도우미.
+// (한 페이지 안에서 여러 번 호출돼도 콜백 이름이 겹치지 않게 매번 새로 만든다.)
+let _sheetCallSeq = 0;
+function fetchFromSheet(url, timeoutMs){
+  return new Promise((resolve, reject)=>{
+    const cbName = '__batchimCb_' + (++_sheetCallSeq) + '_' + Date.now();
+    const script = document.createElement('script');
+    let done = false;
+    const cleanup = ()=>{
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+      clearTimeout(timer);
+    };
+    window[cbName] = (data)=>{
+      if (done) return;
+      done = true;
+      cleanup();
+      resolve(data);
+    };
+    const timer = setTimeout(()=>{
+      if (done) return;
+      done = true;
+      cleanup();
+      reject(new Error('timeout'));
+    }, timeoutMs || 8000);
+    script.onerror = ()=>{
+      if (done) return;
+      done = true;
+      cleanup();
+      reject(new Error('load-error'));
+    };
+    const sep = url.indexOf('?') === -1 ? '?' : '&';
+    script.src = url + sep + 'callback=' + cbName;
+    document.head.appendChild(script);
+  });
+}
+
 async function loadFromSheet(){
-  if(!SHEET_API_URL || SHEET_API_URL==='__SHEET_API_URL__'){
-    sheetStatus='시트 주소가 아직 연결되지 않았어요 (배포 설정 확인)';
+  if(!SHEET_API_URL){
+    sheetStatus='연결된 시트가 없어요. ⚙️ 설정에서 시트 주소를 연결해 주세요';
     return false;
   }
   try{
-    // redirect:'follow'로 Apps Script 302 리다이렉트 대응
-    const res=await fetch(SHEET_API_URL,{method:'GET',redirect:'follow'});
-    if(!res.ok){
-      sheetStatus='시트 응답 오류 ('+res.status+')';
-      return false;
-    }
-    const text=await res.text();
-    let data;
-    try{ data=JSON.parse(text); }
-    catch(pe){
-      sheetStatus='시트 응답을 읽을 수 없어요 (JSON 아님). 배포 권한을 확인하세요';
-      console.warn('JSON 파싱 실패, 응답:',text.slice(0,200));
-      return false;
-    }
+    const data = await fetchFromSheet(SHEET_API_URL, 8000);
     if(data.error){ sheetStatus='시트 오류: '+data.error; }
     if(Array.isArray(data.names)&&data.names.length){
       STUDENT_NAMES.splice(0,STUDENT_NAMES.length,...data.names);
@@ -2298,14 +2446,14 @@ async function loadFromSheet(){
     sheetStatus='연결 성공! 이름 '+nNames+'명, 낱말 '+nRows+'개';
     return true;
   }catch(e){
-    sheetStatus='시트에 연결하지 못했어요 (네트워크/CORS). 웹앱 배포를 \'모든 사용자\'로 했는지 확인하세요';
+    sheetStatus='시트에 연결하지 못했어요. 주소가 올바른지, 웹앱 배포가 "모든 사용자"로 되어 있는지 확인하세요';
     console.warn('시트 불러오기 실패, 기본 데이터 사용:',e);
   }
   return false;
 }
 
 async function startApp(){
-  if(SHEET_API_URL && SHEET_API_URL!=='__SHEET_API_URL__'){
+  if(SHEET_API_URL){
     subtitle.textContent='데이터를 불러오는 중… ⏳';
     await loadFromSheet();
   }
